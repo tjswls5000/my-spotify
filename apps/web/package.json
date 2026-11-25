@@ -1,0 +1,29 @@
+{
+  "name": "@my-spotify/web",
+  "private": true,
+  "version": "0.1.0",
+  "description": "React + Vite dark-mode music player frontend for my-spotify",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "oxlint",
+    "test": "tsc -b --noEmit && node -e \"console.log('web typecheck smoke test passed')\"",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@my-spotify/shared-types": "workspace:*",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@my-spotify/typescript-config": "workspace:*",
+    "@types/node": "^24.19.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "oxlint": "^1.90.0",
+    "typescript": "~7.0.2",
+    "vite": "^8.3.6"
+  }
+}

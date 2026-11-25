@@ -1,0 +1,8 @@
+{
+  "extends": "@my-spotify/typescript-config/nestjs.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": ".",
+    "types": ["vitest/globals", "node"]
+  }
+}
