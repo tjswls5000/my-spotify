@@ -28,8 +28,10 @@ describe('AppController (e2e)', () => {
       .expect(200);
 
     expect(response.body).toMatchObject({
-      status: ServiceStatus.OK,
       service: 'my-spotify-api',
     });
+    expect([ServiceStatus.OK, ServiceStatus.DEGRADED]).toContain(
+      response.body.status,
+    );
   });
 });

@@ -4,8 +4,10 @@ import {
   type PlaybackStateDto,
   type TrackDto,
 } from '@my-spotify/shared-types';
+import { resolveMediaUrl } from '../api/client.ts';
 import {
   HeartIcon,
+  MusicNoteIcon,
   PauseIcon,
   PlayIcon,
   RepeatIcon,
@@ -18,8 +20,11 @@ import { formatDuration } from '../utils/format.ts';
 
 interface PlayerBarProps {
   currentTrack: TrackDto | null;
+  serverBaseUrl: string;
   playback: PlaybackStateDto;
-  isLiked: boolean;
+  durationSeconds: number;
+  isBuffering: boolean;
+  playbackError: string | null;
   onTogglePlay: () => void;
   onPrev: () => void;
   onNext: () => void;
@@ -33,14 +38,17 @@ interface PlayerBarProps {
 
 const QUALITY_TEXT: Record<AudioQuality, string> = {
   [AudioQuality.LOSSLESS]: 'Lossless',
-  [AudioQuality.HIGH]: 'High · 320k',
+  [AudioQuality.HIGH]: 'High',
   [AudioQuality.STANDARD]: 'Standard',
 };
 
 export function PlayerBar({
   currentTrack,
+  serverBaseUrl,
   playback,
-  isLiked,
+  durationSeconds,
+  isBuffering,
+  playbackError,
   onTogglePlay,
   onPrev,
   onNext,
@@ -51,38 +59,58 @@ export function PlayerBar({
   onToggleMute,
   onToggleLike,
 }: PlayerBarProps) {
-  const duration = currentTrack?.durationSeconds ?? 0;
+  const duration = durationSeconds || currentTrack?.durationSeconds || 0;
   const progressPercent =
     duration > 0 ? Math.min(100, (playback.positionSeconds / duration) * 100) : 0;
   const volumePercent = Math.round(playback.volume * 100);
+  const coverSrc = resolveMediaUrl(serverBaseUrl, currentTrack?.coverUrl ?? null);
 
   return (
     <footer className="player-bar" aria-label="Audio playback controls">
       <div className="player-now-playing">
         {currentTrack ? (
           <>
-            <img
-              src={currentTrack.coverUrl}
-              alt={`${currentTrack.title} cover`}
-              className="player-cover"
-            />
+            {coverSrc ? (
+              <img
+                src={coverSrc}
+                alt={`${currentTrack.title} cover`}
+                className="player-cover"
+              />
+            ) : (
+              <div
+                className="player-cover player-cover-fallback"
+                aria-hidden="true"
+              >
+                <MusicNoteIcon className="icon-md" />
+              </div>
+            )}
             <div className="player-track-meta">
               <span className="player-track-title">{currentTrack.title}</span>
-              <span className="player-track-artist">{currentTrack.artist}</span>
+              <span className="player-track-artist">
+                {playbackError
+                  ? playbackError
+                  : isBuffering
+                    ? '스트리밍 버퍼링 중...'
+                    : currentTrack.artist}
+              </span>
             </div>
             <button
               id="btn-player-like"
               type="button"
-              className={`icon-button ${isLiked ? 'is-accent' : ''}`}
+              className={`icon-button ${currentTrack.isLiked ? 'is-accent' : ''}`}
               onClick={onToggleLike}
-              aria-label={isLiked ? '현재 곡 좋아요 취소' : '현재 곡 좋아요'}
-              aria-pressed={isLiked}
+              aria-label={
+                currentTrack.isLiked ? '현재 곡 좋아요 취소' : '현재 곡 좋아요'
+              }
+              aria-pressed={currentTrack.isLiked}
             >
-              <HeartIcon className="icon-sm" filled={isLiked} />
+              <HeartIcon className="icon-sm" filled={currentTrack.isLiked} />
             </button>
           </>
         ) : (
-          <span className="player-empty">재생할 트랙을 선택해 주세요</span>
+          <span className="player-empty">
+            서버에 스캔된 트랙을 클릭해 재생하세요
+          </span>
         )}
       </div>
 
@@ -104,6 +132,7 @@ export function PlayerBar({
             id="btn-player-prev"
             type="button"
             className="icon-button"
+            disabled={!currentTrack}
             onClick={onPrev}
             aria-label="이전 트랙"
             title="이전 트랙"
@@ -115,6 +144,7 @@ export function PlayerBar({
             id="btn-player-toggle"
             type="button"
             className="btn-player-play"
+            disabled={!currentTrack}
             onClick={onTogglePlay}
             aria-label={playback.isPlaying ? '일시정지' : '재생'}
             title={playback.isPlaying ? '일시정지 (Space)' : '재생 (Space)'}
@@ -130,6 +160,7 @@ export function PlayerBar({
             id="btn-player-next"
             type="button"
             className="icon-button"
+            disabled={!currentTrack}
             onClick={onNext}
             aria-label="다음 트랙"
             title="다음 트랙"
@@ -164,6 +195,7 @@ export function PlayerBar({
             className="range-slider"
             min={0}
             max={duration || 100}
+            step={0.5}
             value={Math.min(playback.positionSeconds, duration || 100)}
             onChange={(event) => onSeek(Number(event.target.value))}
             disabled={!currentTrack}
@@ -180,6 +212,7 @@ export function PlayerBar({
         {currentTrack && (
           <span className={`quality-pill is-${currentTrack.quality}`}>
             {QUALITY_TEXT[currentTrack.quality]}
+            {currentTrack.bitrateKbps ? ` · ${currentTrack.bitrateKbps}k` : ''}
           </span>
         )}
         <div className="volume-control">
