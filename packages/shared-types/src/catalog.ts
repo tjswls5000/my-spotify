@@ -10,18 +10,27 @@ export interface AlbumDto {
   id: string;
   title: string;
   artistName: string;
-  coverUrl: string;
-  releaseYear: number;
+  coverUrl: string | null;
+  releaseYear?: number;
 }
 
 export interface TrackDto {
   id: string;
+  libraryFolderId: string;
   title: string;
   artist: string;
   album: string;
-  coverUrl: string;
+  trackNumber?: number;
+  year?: number;
+  genre?: string;
+  coverUrl: string | null;
+  streamUrl: string;
   durationSeconds: number;
   quality: AudioQuality;
   bitrateKbps?: number;
-  isLiked?: boolean;
+  sampleRateHz?: number;
+  codec?: string;
+  fileSizeBytes: number;
+  isLiked: boolean;
+  createdAt: string;
 }

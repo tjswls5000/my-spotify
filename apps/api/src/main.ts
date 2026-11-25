@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import './database/env.js';
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module.js';
@@ -8,12 +9,19 @@ async function bootstrap(): Promise<void> {
   const logger = new Logger('Bootstrap');
 
   app.setGlobalPrefix('api');
+
+  const rawCors = process.env.CORS_ORIGIN?.trim();
+  const corsOrigin =
+    rawCors === '*'
+      ? true
+      : rawCors
+        ? rawCors.split(',').map((origin) => origin.trim())
+        : true;
+
   app.enableCors({
-    origin: process.env.CORS_ORIGIN?.split(',') ?? [
-      'http://localhost:5173',
-      'http://127.0.0.1:5173',
-    ],
+    origin: corsOrigin,
     credentials: true,
+    exposedHeaders: ['Content-Range', 'Accept-Ranges', 'Content-Length'],
   });
 
   const port = Number(process.env.PORT ?? 3001);

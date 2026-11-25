@@ -3,6 +3,7 @@ export * from './common.js';
 export * from './health.js';
 export * from './auth.js';
 export * from './catalog.js';
+export * from './library.js';
 export * from './playlist.js';
 export * from './streaming.js';
 export * from './history.js';

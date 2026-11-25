@@ -41,6 +41,74 @@ export function LibraryIcon(props: IconProps) {
   );
 }
 
+export function FolderIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true" {...props}>
+      <path
+        d="M3.5 6.5a2 2 0 0 1 2-2h4.2l2 2.2h6.8a2 2 0 0 1 2 2v8.8a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2v-11Z"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function FolderPlusIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true" {...props}>
+      <path
+        d="M3.5 6.5a2 2 0 0 1 2-2h4.2l2 2.2h6.8a2 2 0 0 1 2 2v8.8a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2v-11Z"
+        strokeLinejoin="round"
+      />
+      <path d="M12 10.5v5M9.5 13h5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function ServerIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true" {...props}>
+      <rect x="3.5" y="4" width="17" height="6.5" rx="1.8" />
+      <rect x="3.5" y="13.5" width="17" height="6.5" rx="1.8" />
+      <circle cx="7.5" cy="7.25" r="0.9" fill="currentColor" stroke="none" />
+      <circle cx="7.5" cy="16.75" r="0.9" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+export function MusicNoteIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true" {...props}>
+      <path d="M9 17.5V6.2l10-2v11.3" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="6.5" cy="17.5" r="2.5" />
+      <circle cx="16.5" cy="15.5" r="2.5" />
+    </svg>
+  );
+}
+
+export function TrashIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true" {...props}>
+      <path d="M4.5 7h15M9.5 7V4.8a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1V7M6.5 7l1 12.5a1.5 1.5 0 0 0 1.5 1.4h6a1.5 1.5 0 0 0 1.5-1.4L17.5 7" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function CloseIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" aria-hidden="true" {...props}>
+      <path d="m6 6 12 12M18 6 6 18" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function ChevronUpIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true" {...props}>
+      <path d="M12 19V5M6 11l6-6 6 6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 export function PlayIcon(props: IconProps) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
