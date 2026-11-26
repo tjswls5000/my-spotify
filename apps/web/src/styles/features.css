@@ -1,0 +1,604 @@
+/* Sidebar Scroll Area (Playlists + Folders) */
+.sidebar-scroll-area {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+.sidebar-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-sublist {
+  overflow-y: visible;
+}
+
+.sidebar-divider.compact {
+  margin: 12px 6px;
+}
+
+.sidebar-empty-hint {
+  padding: 10px 10px 12px;
+  border-radius: var(--radius-md);
+  background: hsla(0 0% 100% / 0.02);
+  border: 1px dashed var(--border-subtle);
+  text-align: center;
+}
+
+.sidebar-empty-hint p {
+  margin: 0;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+.playlist-avatar-img {
+  object-fit: cover;
+}
+
+/* Sidebar Auth / Security Button */
+.sidebar-auth-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 12px;
+  padding: 9px 10px;
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  text-align: left;
+  transition:
+    background-color 140ms ease,
+    border-color 140ms ease;
+}
+
+.sidebar-auth-btn:hover {
+  background: var(--bg-surface-hover);
+  border-color: var(--border-strong);
+}
+
+.sidebar-auth-btn.is-locked {
+  border-color: hsla(38 92% 54% / 0.4);
+  background: hsla(38 92% 54% / 0.08);
+}
+
+.sidebar-auth-btn.is-authenticated {
+  border-color: hsla(141 73% 42% / 0.25);
+}
+
+.sidebar-auth-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: hsla(0 0% 100% / 0.06);
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.sidebar-auth-btn.is-authenticated .sidebar-auth-icon {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.sidebar-auth-btn.is-locked .sidebar-auth-icon {
+  background: hsla(38 92% 54% / 0.16);
+  color: var(--warning);
+}
+
+.sidebar-auth-initial {
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.sidebar-auth-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 2px;
+}
+
+.sidebar-auth-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-auth-sub {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Enhanced Track Table Grid & Row Actions */
+.track-table-header.track-grid-enhanced,
+.track-row.track-grid-enhanced {
+  grid-template-columns: 40px minmax(200px, 2fr) minmax(120px, 1.1fr) 74px minmax(175px, auto);
+}
+
+.track-table-header.track-grid-enhanced.is-playlist-view,
+.track-row.track-grid-enhanced.is-playlist-view {
+  grid-template-columns: 40px minmax(190px, 1.9fr) minmax(110px, 1fr) 70px minmax(250px, auto);
+}
+
+.track-row.has-open-menu {
+  position: relative;
+  z-index: 25;
+  background: hsla(0 0% 100% / 0.08);
+}
+
+.col-album {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.played-at-badge {
+  flex-shrink: 0;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: hsla(0 0% 100% / 0.06);
+  border: 1px solid var(--border-subtle);
+  font-size: 0.69rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.col-duration-enhanced {
+  gap: 8px;
+}
+
+.track-row-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.track-row:hover .track-row-actions,
+.track-row:focus-within .track-row-actions,
+.track-row.has-open-menu .track-row-actions {
+  opacity: 1;
+}
+
+.row-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  color: var(--text-secondary);
+  transition:
+    color 120ms ease,
+    background-color 120ms ease;
+}
+
+.row-action-btn:hover:not(:disabled),
+.row-action-btn.is-active {
+  color: var(--text-primary);
+  background: hsla(0 0% 100% / 0.1);
+}
+
+.row-action-btn.is-active {
+  color: var(--accent);
+}
+
+.row-action-btn.is-danger:hover:not(:disabled) {
+  color: var(--danger);
+  background: var(--danger-soft);
+}
+
+/* Inline Add-to-Playlist Popover */
+.playlist-popover-anchor {
+  position: relative;
+  display: inline-flex;
+}
+
+.playlist-popover {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 40;
+  width: 224px;
+  padding: 6px;
+  border-radius: var(--radius-md);
+  background: hsl(220 11% 12%);
+  border: 1px solid var(--border-strong);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.62);
+}
+
+.playlist-popover-header {
+  padding: 6px 8px 5px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.playlist-popover-list {
+  display: flex;
+  flex-direction: column;
+  max-height: 190px;
+  overflow-y: auto;
+  gap: 2px;
+}
+
+.playlist-popover-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.81rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: left;
+  transition: background-color 110ms ease;
+}
+
+.playlist-popover-item:hover {
+  background: hsla(0 0% 100% / 0.09);
+}
+
+.playlist-popover-item.is-create {
+  color: var(--accent);
+}
+
+.playlist-popover-name {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.playlist-popover-count {
+  font-size: 0.71rem;
+  color: var(--text-muted);
+}
+
+.playlist-popover-empty {
+  margin: 0;
+  padding: 8px;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+.playlist-popover-divider {
+  height: 1px;
+  background: var(--border-subtle);
+  margin: 5px 4px;
+}
+
+/* Playlist Action Bar Danger / Confirm */
+.btn-action-ghost.is-danger-hover:hover:not(:disabled) {
+  color: var(--danger);
+  border-color: hsla(356 76% 58% / 0.35);
+  background: var(--danger-soft);
+}
+
+.btn-action-danger {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--danger);
+  color: #ffffff;
+  font-size: 0.84rem;
+  font-weight: 700;
+  transition: filter 120ms ease;
+}
+
+.btn-action-danger:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.inline-confirm-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Player Bar Queue Toggle Button & Badge */
+.queue-toggle-btn {
+  position: relative;
+}
+
+.queue-btn-badge {
+  position: absolute;
+  top: -2px;
+  right: -4px;
+  min-width: 17px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #090b0a;
+  font-size: 0.63rem;
+  font-weight: 800;
+  line-height: 16px;
+  text-align: center;
+}
+
+/* Compact Modals (PlaylistModal & AuthModal) */
+.modal-card-sm {
+  width: min(490px, 100%);
+}
+
+.modal-heading-with-icon {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.modal-badge-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.modal-badge-icon.is-locked {
+  color: var(--warning);
+  background: hsla(38 92% 54% / 0.12);
+  border-color: hsla(38 92% 54% / 0.3);
+}
+
+.modal-badge-icon.is-ok {
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-color: hsla(141 73% 42% / 0.3);
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.text-area {
+  resize: vertical;
+  min-height: 78px;
+  font-family: inherit;
+  line-height: 1.45;
+}
+
+.modal-footer-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+/* Auth Modal & Lock Screen */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.auth-subform {
+  padding: 14px;
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+}
+
+.auth-info-box {
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: hsla(141 73% 42% / 0.08);
+  border: 1px solid hsla(141 73% 42% / 0.22);
+}
+
+.auth-info-box strong {
+  display: block;
+  font-size: 0.83rem;
+  color: var(--accent);
+  margin-bottom: 5px;
+}
+
+.auth-info-box p {
+  margin: 0;
+  font-size: 0.79rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.auth-profile-view {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.auth-profile-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+}
+
+.auth-avatar-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 1.15rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.auth-profile-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.auth-profile-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.auth-profile-name {
+  font-size: 0.96rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.role-badge {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+}
+
+.role-badge.is-admin {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.role-badge.is-user {
+  background: hsla(0 0% 100% / 0.08);
+  color: var(--text-secondary);
+}
+
+.auth-profile-email {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.auth-profile-count {
+  font-size: 0.73rem;
+  color: var(--text-muted);
+}
+
+.btn-danger-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid hsla(356 76% 58% / 0.45);
+  background: var(--danger-soft);
+  color: var(--danger);
+  font-size: 0.84rem;
+  font-weight: 700;
+  transition: filter 120ms ease;
+}
+
+.btn-danger-outline:hover:not(:disabled) {
+  filter: brightness(1.12);
+}
+
+/* Main View Auth Lock Screen */
+.auth-lock-screen {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 36px 24px;
+}
+
+.auth-lock-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 440px;
+  padding: 36px 32px;
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+.auth-lock-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: hsla(38 92% 54% / 0.14);
+  border: 1px solid hsla(38 92% 54% / 0.34);
+  color: var(--warning);
+  margin-bottom: 16px;
+}
+
+.auth-lock-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.auth-lock-title {
+  margin: 8px 0 10px;
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.auth-lock-description {
+  margin: 0 0 22px;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.auth-lock-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+@media (max-width: 960px) {
+  .track-table-header.track-grid-enhanced,
+  .track-row.track-grid-enhanced {
+    grid-template-columns: 36px minmax(170px, 1.8fr) 68px minmax(150px, auto);
+  }
+
+  .track-table-header.track-grid-enhanced.is-playlist-view,
+  .track-row.track-grid-enhanced.is-playlist-view {
+    grid-template-columns: 36px minmax(160px, 1.6fr) 64px minmax(220px, auto);
+  }
+}

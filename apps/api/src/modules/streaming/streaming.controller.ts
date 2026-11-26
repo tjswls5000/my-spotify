@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import type { ApiResponse, StreamManifestDto } from '@my-spotify/shared-types';
 import type { Response } from 'express';
+import { AllowQueryToken } from '../auth/public.decorator.js';
 import { StreamingService } from './streaming.service.js';
 
 function parseByteRange(
@@ -66,6 +67,7 @@ export class StreamingController {
     return { data };
   }
 
+  @AllowQueryToken()
   @Get(':trackId')
   async streamTrack(
     @Param('trackId') trackId: string,

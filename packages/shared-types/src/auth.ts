@@ -13,3 +13,29 @@ export interface AuthTokensDto {
   refreshToken: string;
   expiresInSeconds: number;
 }
+
+export interface AuthStatusDto {
+  authEnabled: boolean;
+  userCount: number;
+  currentUser: UserProfileDto | null;
+}
+
+export interface RegisterRequestDto {
+  email: string;
+  password: string;
+  displayName: string;
+}
+
+export interface LoginRequestDto {
+  email: string;
+  password: string;
+}
+
+export interface RefreshTokenRequestDto {
+  refreshToken: string;
+}
+
+export interface AuthResponseDto {
+  user: UserProfileDto;
+  tokens: AuthTokensDto;
+}

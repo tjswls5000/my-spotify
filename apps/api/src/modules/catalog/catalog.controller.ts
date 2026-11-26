@@ -21,6 +21,7 @@ import type {
   TrackDto,
 } from '@my-spotify/shared-types';
 import type { Response } from 'express';
+import { AllowQueryToken } from '../auth/public.decorator.js';
 import { CatalogService } from './catalog.service.js';
 
 @Controller('catalog')
@@ -53,6 +54,7 @@ export class CatalogController {
     return { data };
   }
 
+  @AllowQueryToken()
   @Get('tracks/:id/cover')
   async getTrackCover(
     @Param('id') id: string,

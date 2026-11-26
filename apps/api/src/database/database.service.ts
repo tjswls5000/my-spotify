@@ -94,6 +94,71 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
       CREATE INDEX IF NOT EXISTS tracks_artist_idx ON tracks (artist);
       CREATE INDEX IF NOT EXISTS tracks_album_idx ON tracks (album);
     `);
+
+    await this.pool.query(`
+      CREATE TABLE IF NOT EXISTS playlists (
+        id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+        name text NOT NULL,
+        description text NOT NULL DEFAULT '',
+        cover_url text,
+        created_at timestamptz NOT NULL DEFAULT now(),
+        updated_at timestamptz NOT NULL DEFAULT now()
+      );
+    `);
+
+    await this.pool.query(`
+      CREATE TABLE IF NOT EXISTS playlist_tracks (
+        id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+        playlist_id uuid NOT NULL REFERENCES playlists(id) ON DELETE CASCADE,
+        track_id uuid NOT NULL REFERENCES tracks(id) ON DELETE CASCADE,
+        position integer NOT NULL DEFAULT 0,
+        added_at timestamptz NOT NULL DEFAULT now()
+      );
+    `);
+
+    await this.pool.query(`
+      CREATE UNIQUE INDEX IF NOT EXISTS playlist_tracks_playlist_id_track_id_uidx ON playlist_tracks (playlist_id, track_id);
+      CREATE INDEX IF NOT EXISTS playlist_tracks_playlist_id_position_idx ON playlist_tracks (playlist_id, position);
+    `);
+
+    await this.pool.query(`
+      CREATE TABLE IF NOT EXISTS playback_history (
+        id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+        track_id uuid NOT NULL REFERENCES tracks(id) ON DELETE CASCADE,
+        played_at timestamptz NOT NULL DEFAULT now(),
+        duration_listened_seconds integer NOT NULL DEFAULT 0,
+        completed boolean NOT NULL DEFAULT false
+      );
+    `);
+
+    await this.pool.query(`
+      CREATE INDEX IF NOT EXISTS playback_history_played_at_idx ON playback_history (played_at);
+    `);
+
+    await this.pool.query(`
+      CREATE TABLE IF NOT EXISTS playback_states (
+        id text PRIMARY KEY DEFAULT 'default',
+        current_track_id uuid REFERENCES tracks(id) ON DELETE SET NULL,
+        position_seconds integer NOT NULL DEFAULT 0,
+        volume double precision NOT NULL DEFAULT 0.8,
+        is_shuffled boolean NOT NULL DEFAULT false,
+        repeat_mode text NOT NULL DEFAULT 'all',
+        updated_at timestamptz NOT NULL DEFAULT now()
+      );
+    `);
+
+    await this.pool.query(`
+      CREATE TABLE IF NOT EXISTS users (
+        id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+        email text NOT NULL UNIQUE,
+        display_name text NOT NULL,
+        password_hash text NOT NULL,
+        role text NOT NULL DEFAULT 'user',
+        avatar_url text,
+        created_at timestamptz NOT NULL DEFAULT now(),
+        updated_at timestamptz NOT NULL DEFAULT now()
+      );
+    `);
   }
 
   async checkHealth(): Promise<ServiceHealthDetail> {
