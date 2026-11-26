@@ -4,7 +4,7 @@ export interface PlaylistDto {
   id: string;
   name: string;
   description: string;
-  coverUrl: string;
+  coverUrl: string | null;
   trackCount: number;
   totalDurationSeconds: number;
   tracks?: TrackDto[];
@@ -15,5 +15,19 @@ export interface PlaylistDto {
 export interface CreatePlaylistRequestDto {
   name: string;
   description?: string;
-  coverUrl?: string;
+  coverUrl?: string | null;
+}
+
+export interface UpdatePlaylistRequestDto {
+  name?: string;
+  description?: string;
+  coverUrl?: string | null;
+}
+
+export interface AddPlaylistTracksRequestDto {
+  trackIds: string[];
+}
+
+export interface ReorderPlaylistTracksRequestDto {
+  trackIds: string[];
 }

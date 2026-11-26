@@ -1,21 +1,36 @@
 import {
   ServiceStatus,
+  UserRole,
+  type AuthStatusDto,
   type HealthCheckResponse,
   type LibraryFolderDto,
+  type PlaylistDto,
 } from '@my-spotify/shared-types';
+import { resolveMediaUrl } from '../api/client.ts';
 import {
   BrandMarkIcon,
   FolderIcon,
   FolderPlusIcon,
   HeartIcon,
+  HistoryIcon,
   HomeIcon,
+  ListMusicIcon,
+  LockIcon,
+  PlusIcon,
   RefreshIcon,
   SearchIcon,
   ServerIcon,
+  ShieldIcon,
 } from './Icons.tsx';
 import { formatUptime } from '../utils/format.ts';
 
-export type NavSection = 'all' | 'search' | 'liked' | 'folder';
+export type NavSection =
+  | 'all'
+  | 'search'
+  | 'liked'
+  | 'recent'
+  | 'folder'
+  | 'playlist';
 
 export interface ApiHealthState {
   status: 'loading' | 'connected' | 'error';
@@ -30,12 +45,19 @@ interface SidebarProps {
   libraries: LibraryFolderDto[];
   selectedLibraryId: string | null;
   onSelectLibrary: (libraryId: string) => void;
+  playlists: PlaylistDto[];
+  selectedPlaylistId: string | null;
+  onSelectPlaylist: (playlistId: string) => void;
+  onCreatePlaylist: () => void;
   totalTrackCount: number;
   likedTrackCount: number;
+  recentHistoryCount: number;
   serverBaseUrl: string;
   apiHealth: ApiHealthState;
+  authStatus: AuthStatusDto;
   onRefreshHealth: () => void;
   onOpenLibraryManager: () => void;
+  onOpenAuthModal: () => void;
 }
 
 export function Sidebar({
@@ -44,12 +66,19 @@ export function Sidebar({
   libraries,
   selectedLibraryId,
   onSelectLibrary,
+  playlists,
+  selectedPlaylistId,
+  onSelectPlaylist,
+  onCreatePlaylist,
   totalTrackCount,
   likedTrackCount,
+  recentHistoryCount,
   serverBaseUrl,
   apiHealth,
+  authStatus,
   onRefreshHealth,
   onOpenLibraryManager,
+  onOpenAuthModal,
 }: SidebarProps) {
   const dbCheck = apiHealth.payload?.checks?.find(
     (check) => check.name === 'postgres',
@@ -58,6 +87,7 @@ export function Sidebar({
   const isDbUp = dbCheck?.status === ServiceStatus.OK;
   const isFullyHealthy =
     isApiUp && apiHealth.payload?.status === ServiceStatus.OK;
+  const isAuthLocked = authStatus.authEnabled && !authStatus.currentUser;
 
   const statusLabel =
     apiHealth.status === 'loading'
@@ -108,68 +138,192 @@ export function Sidebar({
           <span className="nav-label">좋아요 표시한 곡</span>
           <span className="count-chip">{likedTrackCount}</span>
         </button>
+        <button
+          id="nav-recent"
+          type="button"
+          className={`nav-item ${activeNav === 'recent' ? 'is-active' : ''}`}
+          onClick={() => onSelectNav('recent')}
+        >
+          <HistoryIcon className="nav-icon" />
+          <span className="nav-label">최근 재생</span>
+          <span className="count-chip">{recentHistoryCount}</span>
+        </button>
       </nav>
 
       <div className="sidebar-divider" />
 
-      <section className="sidebar-playlists" aria-label="Server library folders">
-        <div className="sidebar-section-header">
-          <span>서버 음원 폴더</span>
-          <button
-            id="btn-sidebar-add-folder"
-            type="button"
-            className="btn-inline-add"
-            onClick={onOpenLibraryManager}
-            title="스트리밍 서버 음원 폴더 추가 및 관리"
-          >
-            <FolderPlusIcon className="icon-xs" />
-            <span>폴더 관리</span>
-          </button>
-        </div>
-
-        {libraries.length === 0 ? (
-          <div className="sidebar-empty-folders">
-            <p>연결된 음원 폴더가 없습니다.</p>
+      <div className="sidebar-scroll-area">
+        {/* Custom Playlists Section */}
+        <section className="sidebar-group" aria-label="Custom playlists">
+          <div className="sidebar-section-header">
+            <span>플레이리스트</span>
             <button
-              id="btn-sidebar-connect-folder"
+              id="btn-sidebar-new-playlist"
               type="button"
-              className="btn-sidebar-cta"
-              onClick={onOpenLibraryManager}
+              className="btn-inline-add"
+              disabled={isAuthLocked || !isDbUp}
+              onClick={onCreatePlaylist}
+              title="새 플레이리스트 만들기"
             >
-              <FolderPlusIcon className="icon-sm" />
-              <span>음원 폴더 선택</span>
+              <PlusIcon className="icon-xs" />
+              <span>새 플레이리스트</span>
             </button>
           </div>
-        ) : (
-          <ul className="playlist-list">
-            {libraries.map((library) => {
-              const isSelected =
-                activeNav === 'folder' && library.id === selectedLibraryId;
-              return (
-                <li key={library.id}>
-                  <button
-                    id={`library-btn-${library.id}`}
-                    type="button"
-                    className={`playlist-item ${isSelected ? 'is-selected' : ''}`}
-                    onClick={() => onSelectLibrary(library.id)}
-                  >
-                    <div className="folder-avatar">
-                      <FolderIcon className="icon-sm" />
-                    </div>
-                    <div className="playlist-meta">
-                      <span className="playlist-title">{library.name}</span>
-                      <span className="playlist-sub">
-                        {library.trackCount}곡 ·{' '}
-                        {library.isWatching ? '자동 스캔' : '수동'}
-                      </span>
-                    </div>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </section>
+
+          {playlists.length === 0 ? (
+            <div className="sidebar-empty-hint">
+              <p>아직 만든 플레이리스트가 없습니다.</p>
+            </div>
+          ) : (
+            <ul className="playlist-list sidebar-sublist">
+              {playlists.map((playlist) => {
+                const isSelected =
+                  activeNav === 'playlist' && playlist.id === selectedPlaylistId;
+                const coverUrl = resolveMediaUrl(
+                  serverBaseUrl,
+                  playlist.coverUrl,
+                );
+                return (
+                  <li key={playlist.id}>
+                    <button
+                      id={`playlist-btn-${playlist.id}`}
+                      type="button"
+                      className={`playlist-item ${isSelected ? 'is-selected' : ''}`}
+                      onClick={() => onSelectPlaylist(playlist.id)}
+                    >
+                      {coverUrl ? (
+                        <img
+                          src={coverUrl}
+                          alt={`${playlist.name} cover`}
+                          className="folder-avatar playlist-avatar-img"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="folder-avatar">
+                          <ListMusicIcon className="icon-sm" />
+                        </div>
+                      )}
+                      <div className="playlist-meta">
+                        <span className="playlist-title">{playlist.name}</span>
+                        <span className="playlist-sub">
+                          {playlist.trackCount}곡
+                        </span>
+                      </div>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </section>
+
+        <div className="sidebar-divider compact" />
+
+        {/* Server Library Folders Section */}
+        <section className="sidebar-group" aria-label="Server library folders">
+          <div className="sidebar-section-header">
+            <span>서버 음원 폴더</span>
+            <button
+              id="btn-sidebar-add-folder"
+              type="button"
+              className="btn-inline-add"
+              onClick={onOpenLibraryManager}
+              title="스트리밍 서버 음원 폴더 추가 및 관리"
+            >
+              <FolderPlusIcon className="icon-xs" />
+              <span>폴더 관리</span>
+            </button>
+          </div>
+
+          {libraries.length === 0 ? (
+            <div className="sidebar-empty-folders">
+              <p>연결된 음원 폴더가 없습니다.</p>
+              <button
+                id="btn-sidebar-connect-folder"
+                type="button"
+                className="btn-sidebar-cta"
+                onClick={onOpenLibraryManager}
+              >
+                <FolderPlusIcon className="icon-sm" />
+                <span>음원 폴더 선택</span>
+              </button>
+            </div>
+          ) : (
+            <ul className="playlist-list sidebar-sublist">
+              {libraries.map((library) => {
+                const isSelected =
+                  activeNav === 'folder' && library.id === selectedLibraryId;
+                return (
+                  <li key={library.id}>
+                    <button
+                      id={`library-btn-${library.id}`}
+                      type="button"
+                      className={`playlist-item ${isSelected ? 'is-selected' : ''}`}
+                      onClick={() => onSelectLibrary(library.id)}
+                    >
+                      <div className="folder-avatar">
+                        <FolderIcon className="icon-sm" />
+                      </div>
+                      <div className="playlist-meta">
+                        <span className="playlist-title">{library.name}</span>
+                        <span className="playlist-sub">
+                          {library.trackCount}곡 ·{' '}
+                          {library.isWatching ? '자동 스캔' : '수동'}
+                        </span>
+                      </div>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </section>
+      </div>
+
+      {/* Account / Remote Security Status Button */}
+      <button
+        id="btn-sidebar-auth"
+        type="button"
+        className={`sidebar-auth-btn ${
+          authStatus.currentUser
+            ? 'is-authenticated'
+            : isAuthLocked
+              ? 'is-locked'
+              : ''
+        }`}
+        onClick={onOpenAuthModal}
+        title="계정 및 원격 접근 보안 설정"
+      >
+        <div className="sidebar-auth-icon" aria-hidden="true">
+          {authStatus.currentUser ? (
+            <span className="sidebar-auth-initial">
+              {authStatus.currentUser.displayName.slice(0, 1).toUpperCase()}
+            </span>
+          ) : isAuthLocked ? (
+            <LockIcon className="icon-sm" />
+          ) : (
+            <ShieldIcon className="icon-sm" />
+          )}
+        </div>
+        <div className="sidebar-auth-meta">
+          <span className="sidebar-auth-title">
+            {authStatus.currentUser
+              ? authStatus.currentUser.displayName
+              : isAuthLocked
+                ? '로그인 필요'
+                : '보안 설정 (로컬)'}
+          </span>
+          <span className="sidebar-auth-sub">
+            {authStatus.currentUser
+              ? authStatus.currentUser.role === UserRole.ADMIN
+                ? '관리자 · 원격 보호 활성'
+                : '로그인됨 · 원격 보호 활성'
+              : isAuthLocked
+                ? '외부 접근 잠금됨 · 클릭해 로그인'
+                : '개방 모드 · 관리자 계정으로 잠금'}
+          </span>
+        </div>
+      </button>
 
       <section className="api-status-panel" aria-live="polite">
         <div className="api-status-top">

@@ -1,0 +1,350 @@
+/* Playback Queue Slide-Over Drawer */
+.queue-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  justify-content: flex-end;
+  background: rgba(5, 6, 8, 0.62);
+  backdrop-filter: blur(6px);
+  animation: queue-backdrop-fade 180ms ease-out;
+}
+
+.queue-drawer-panel {
+  display: flex;
+  flex-direction: column;
+  width: min(410px, 100vw);
+  height: 100%;
+  background: var(--bg-panel);
+  border-left: 1px solid var(--border-strong);
+  box-shadow: -20px 0 54px rgba(0, 0, 0, 0.58);
+  outline: none;
+  animation: queue-drawer-slide 210ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.queue-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 20px 16px;
+  border-bottom: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+}
+
+.queue-drawer-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.queue-drawer-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.queue-drawer-subtitle {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+}
+
+.queue-drawer-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 16px 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.queue-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.queue-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 4px;
+}
+
+.queue-section-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.queue-section-title {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--text-secondary);
+}
+
+.queue-count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  font-size: 0.69rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.queue-clear-button {
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  background: transparent;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition:
+    color 120ms ease,
+    border-color 120ms ease,
+    background-color 120ms ease;
+}
+
+.queue-clear-button:hover {
+  color: var(--text-primary);
+  border-color: hsla(0 0% 100% / 0.28);
+  background: hsla(0 0% 100% / 0.06);
+}
+
+/* Now Playing Card */
+.queue-now-playing-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+}
+
+.queue-now-playing-card.is-playing {
+  border-color: hsla(141 73% 42% / 0.34);
+  background: linear-gradient(
+    135deg,
+    hsla(141 73% 42% / 0.11) 0%,
+    var(--bg-surface) 62%
+  );
+}
+
+.queue-now-playing-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.queue-paused-pill {
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: hsla(0 0% 100% / 0.07);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* Queue Track Lists */
+.queue-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.queue-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px 4px 4px;
+  border-radius: var(--radius-sm);
+  transition: background-color 120ms ease;
+}
+
+.queue-row:hover,
+.queue-row:focus-within {
+  background: var(--bg-surface-hover);
+}
+
+.queue-row-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  text-align: left;
+}
+
+.queue-row-main:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+.queue-context-index {
+  width: 20px;
+  text-align: right;
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+/* Cover Thumbnail */
+.queue-cover-wrap {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--bg-surface);
+}
+
+.queue-cover-wrap.is-lg {
+  width: 48px;
+  height: 48px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+}
+
+.queue-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.queue-cover-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  background: hsla(0 0% 100% / 0.05);
+}
+
+.queue-cover-play-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(8, 10, 14, 0.66);
+  color: var(--text-primary);
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.queue-row:hover .queue-cover-play-overlay,
+.queue-row-main:focus-visible .queue-cover-play-overlay {
+  opacity: 1;
+}
+
+/* Track Meta */
+.queue-track-meta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.queue-track-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.queue-track-title.is-accent {
+  color: var(--accent);
+}
+
+.queue-track-sub {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.queue-duration {
+  font-size: 0.73rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+/* Row Actions */
+.queue-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.queue-action-btn {
+  width: 26px;
+  height: 26px;
+}
+
+.queue-chevron-down {
+  transform: rotate(180deg);
+}
+
+.queue-empty-note {
+  margin: 0;
+  padding: 14px 12px;
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--border-subtle);
+  background: hsla(0 0% 100% / 0.02);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+@keyframes queue-backdrop-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes queue-drawer-slide {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 720px) {
+  .queue-drawer-panel {
+    width: 100vw;
+    border-left: none;
+  }
+}

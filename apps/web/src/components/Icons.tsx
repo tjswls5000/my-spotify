@@ -214,3 +214,114 @@ export function ClockIcon(props: IconProps) {
     </svg>
   );
 }
+
+export function HistoryIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true" {...props}>
+      <path d="M3.5 12a8.5 8.5 0 1 0 2.5-6L3.5 8.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M3.5 4v4.5H8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M12 7.5v4.8l3.2 1.9" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function PlusIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" aria-hidden="true" {...props}>
+      <path d="M12 5v14M5 12h14" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function ListMusicIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true" {...props}>
+      <path d="M4 6h12M4 11h8M4 16h6" strokeLinecap="round" />
+      <path d="M16 17.5V9.5l5-1.2V16" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="14.2" cy="17.5" r="2" />
+      <circle cx="19.2" cy="16" r="2" />
+    </svg>
+  );
+}
+
+export function QueueListIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true" {...props}>
+      <path d="M4 6h16M4 12h11M4 18h8" strokeLinecap="round" />
+      <path d="M16.5 14.5v5.2l4.2-2.6-4.2-2.6Z" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+export function PlayNextIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true" {...props}>
+      <path d="M4 6h11M4 11h8M4 16h6" strokeLinecap="round" />
+      <path d="M15.5 11.5v7l5.5-3.5-5.5-3.5Z" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+export function EditIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true" {...props}>
+      <path d="M15.5 5.5 18.5 8.5 8 19H5v-3L15.5 5.5Z" strokeLinejoin="round" />
+      <path d="m13.5 7.5 3 3" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function ChevronDownIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true" {...props}>
+      <path d="M12 5v14M6 13l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function ShieldIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true" {...props}>
+      <path
+        d="M12 3.2 5 6.2v5.3c0 4.6 3 8.4 7 9.7 4-1.3 7-5.1 7-9.7V6.2l-7-3Z"
+        strokeLinejoin="round"
+      />
+      <path d="m9.2 12.1 1.9 1.9 3.8-4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function LockIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true" {...props}>
+      <rect x="4.5" y="10.5" width="15" height="9.5" rx="2" />
+      <path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function UserIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true" {...props}>
+      <circle cx="12" cy="8" r="3.8" />
+      <path d="M4.8 19.5a7.2 7.2 0 0 1 14.4 0" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function LogoutIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true" {...props}>
+      <path d="M10 4.5H6a1.8 1.8 0 0 0-1.8 1.8v11.4A1.8 1.8 0 0 0 6 19.5h4" strokeLinecap="round" />
+      <path d="m15 8 4.5 4-4.5 4M19.5 12H9.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function CheckIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" aria-hidden="true" {...props}>
+      <path d="m5 12.5 4.5 4.5L19 7.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}

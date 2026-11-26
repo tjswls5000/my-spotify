@@ -10,6 +10,7 @@ import {
   MusicNoteIcon,
   PauseIcon,
   PlayIcon,
+  QueueListIcon,
   RepeatIcon,
   ShuffleIcon,
   SkipNextIcon,
@@ -25,6 +26,9 @@ interface PlayerBarProps {
   durationSeconds: number;
   isBuffering: boolean;
   playbackError: string | null;
+  queueCount: number;
+  isQueueOpen: boolean;
+  onToggleQueue: () => void;
   onTogglePlay: () => void;
   onPrev: () => void;
   onNext: () => void;
@@ -49,6 +53,9 @@ export function PlayerBar({
   durationSeconds,
   isBuffering,
   playbackError,
+  queueCount,
+  isQueueOpen,
+  onToggleQueue,
   onTogglePlay,
   onPrev,
   onNext,
@@ -215,6 +222,30 @@ export function PlayerBar({
             {currentTrack.bitrateKbps ? ` · ${currentTrack.bitrateKbps}k` : ''}
           </span>
         )}
+
+        <button
+          id="btn-player-queue"
+          type="button"
+          className={`icon-button queue-toggle-btn ${
+            isQueueOpen ? 'is-accent' : ''
+          }`}
+          onClick={onToggleQueue}
+          aria-label="재생 대기열 열기"
+          aria-pressed={isQueueOpen}
+          title={
+            queueCount > 0
+              ? `재생 대기열 (${queueCount}곡 대기 중)`
+              : '재생 대기열'
+          }
+        >
+          <QueueListIcon className="icon-sm" />
+          {queueCount > 0 && (
+            <span className="queue-btn-badge mono">
+              {queueCount > 99 ? '99+' : queueCount}
+            </span>
+          )}
+        </button>
+
         <div className="volume-control">
           <button
             id="btn-player-mute"
